@@ -14,7 +14,7 @@ router.get('/model/:model', PreventAuthErrors, auth,  (req, res, next) => {
 
   let records = await req.model.getFromField({});
   console.log(records);
-  let recordCount = records.length();
+  let recordCount = records.length;
 
   let resData = {
     model: req.params.model,
