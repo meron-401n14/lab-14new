@@ -14,9 +14,24 @@ const users = new mongoose.Schema({
   password: { type: String, required: true },
   email: { type: String },
   role: { type: String, default: 'user', enum: ['admin', 'editor', 'user'] },
+},
+{ toObject: {virtuals:true}, toJSON: {virtuals: true}},
+);
+
+users.virtual('virtual_role', {
+  ref: 'roles',
+  localField: 'role',
+  foreignField: 'role',
+  justOne: true,
+
+});
+
+users.pre('findOne', function() {
+  this.populate('virtual_role');
 });
 /**
- * this function compares a plaintext password with the stored hashed password
+ * this function compares a plaintext password with the stored hashed password with the stored hased
+ * password for an individual user record (`this` refers to an individual )
  * for an individua; user record (`this` referes to an indevidual )record
  * @param string paintext 
  */
@@ -39,6 +54,12 @@ console.log('Current Time')
     exp: expiry, 
   }, process.env.JWT_SECRET);
 };
+
+users.methods.can =  function(capability) {
+// check user (this) > virtual_role > capabilites > if the parameter exisits in this array
+
+return this.virtual_role.capabilities.includes(capablity);
+}
 
 /**
  * Exporting a mongoose model generated from the above schema, statics, methods and middleware

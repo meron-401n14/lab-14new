@@ -16,8 +16,22 @@ const basicDecode = async encoded => {
   let plainText = base64.toString();
   //sara:sarahpassword
   //{username: sarah, password}
-  let [username, password] = plainTxst.split(':');
+
+
+
+  let [username, password] = plainText.split(':');
   let user = await users.getFromField({username});
+
+if(user.length){
+  let isSamePassword = await user[0].comparePassword(password);
+  if(isSamePassword) return user[0];
+  else{
+    let newUser = await users.create({username: username, password: password});
+    return newUser;
+
+  }
+}
+
   // if its an empty array, we wont hit this
   //otherwise, we want to get to the object at index 0
   // if(user.length){
@@ -33,11 +47,16 @@ const basicDecode = async encoded => {
 };
 
 const bearerDecrypt = token => {
+  try {let tokenData= jwt.verify(token, process.env.JWT_SECRET);
+  if(tokenData && tokenData.data && tokenData.data.id)
+  return await users.get(tokenData.data.id)
+  } catch (e){
 
+  }
   return null;
 };
 /**
- * [description]
+ * 
  * 
  */
 const strictAuthHandler  = async (req, res, next) => {
@@ -45,7 +64,7 @@ const strictAuthHandler  = async (req, res, next) => {
 
   if(!req.headers.authorization) 
 
- req.authError === false ? next() : next({status: 400, msg: 'Missing request headers!');
+ return req.authError === false ? next() : next({status: 400, msg: 'Missing request headers!');
 
     authSplitString = req.headers.authorization.split(/\s+/);
 
