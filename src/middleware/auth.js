@@ -20,6 +20,7 @@ const basicDecode = async encoded => {
 
 
   let [username, password] = plainText.split(':');
+  
   let user = await users.getFromField({username});
 
 if(user.length){

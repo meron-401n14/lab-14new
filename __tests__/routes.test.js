@@ -8,6 +8,7 @@ const server = require('../src/server.js').server;
 const supertester = require('./supertester.js');
 
 const mockRequest = supertester.server(server);
+process.env.JWT_SECRET = 'test-secret';
 
 let users = {
   admin: {
@@ -76,3 +77,21 @@ afterAll(stopDB);
 /* describe('xxx', () => {
   it('xxx', () => { }); 
 }); */
+describe('books route  works as expected', ()=>{
+  let adminBasicAuth = Buffer.from( users.admin.username + ':' + users.admin.password).toString('base64');
+  let invalidBasicAuth = 'Basic' + Buffer.from('wrong').toString('base64');
+  let newUserBasicAuth = 'Basic' + Buffer.from('sonia:soniapassword').toString('base64');
+
+  it ('does work when a user is authenticated', async () => {
+    let response = await mockRequest 
+    .post('/signin');
+    .set('Content-Type', 'application/json ')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Wrong blah')
+
+expect(response.status).toBe(400);
+expect(response.body.error).toBe('Missing Basic nor Bearer request header');
+
+
+  });
+});

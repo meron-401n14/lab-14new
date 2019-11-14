@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const roles = require('./roles-schema');
 
+
+
 /**
  * The schema definition for a user record
  * @type {mongoose.Schema}
@@ -60,6 +62,8 @@ users.methods.can =  function(capability) {
 
 return this.virtual_role.capabilities.includes(capablity);
 }
+
+users.pre('save', )
 
 /**
  * Exporting a mongoose model generated from the above schema, statics, methods and middleware

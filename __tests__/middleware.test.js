@@ -3,11 +3,14 @@
 const { startDB, stopDB } = require('./supertester.js');
 const Users = require('../src/models/users-model.js');
 const Roles = require('../src/models/roles-model.js');
-const Books = require('../src/models/books-modle.js');
+const Books = require('../src/models/books-model.js');
 const server = require('../src/server.js').server;
 const supertester = require('./supertester.js');
 
+
 const mockRequest = supertester.server(server);
+process.env.JWT_SECRET = 'test-secret';
+
 
 let users = {
   admin: {
@@ -76,3 +79,24 @@ afterAll(stopDB);
 /* describe('xxx', () => {
   it('xxx', () => { }); 
 }); */
+
+
+
+describe('auth.js  requires correct request headers', ()=>{
+  let validBasicAuth = Buffer.from( users.admin.username + ':' + users.admin.password).toString('base64');
+  let invalidBasicAuth = 'Basic' + Buffer.from('wrong').toString('base64');
+  let newUserBasicAuth = 'Basic' + Buffer.from('sonia:soniapassword').toString('base64');
+
+  it ('throws error when the request header is missing', async () => {
+    let response = await mockRequest 
+    .post('/signin');
+    .set('Content-Type', 'application/json ')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Wrong blah')
+
+expect(response.status).toBe(400);
+expect(response.body.error).toBe('Missing Basic nor Bearer request header');
+
+
+  });
+});
