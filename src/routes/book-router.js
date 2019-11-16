@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth.js');
 const Books = require('../models/books-model.js');
+
 const books = new Books();
 
 router.get('/books', auth,  async(req, res, next) => {
@@ -26,8 +27,9 @@ router.post('/books', auth, async(req, res, next) => {
     await  books.create()(req.body);
     res.status(200).json('You created a book');
   } catch(e) {
+    console.error(e);
     next({status: 400, msg: e.name});
-  else next({status: 403, msg: 'You cannot create a book!'});
+  else  next({status: 403, msg: 'You cannot create a book!'});
 
 });
 router.put('/books/:id', auth, async (req, res, next)=>{

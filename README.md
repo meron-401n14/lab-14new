@@ -1,47 +1,47 @@
-# LAB: API Server Revisited
+# LAB - 
 
-Implement a fully functional, authenticated and authorized API Server using the latest coding techniques
+## Project: Access Control
 
-Over the course of the previous 2 blocks, you have separately created an `auth-server` and an `api-server`
+### Author: Meron
 
-In this project, the core requirement is to marry those 2 servers to create a single, authenticated API server.
+### Links and Resources
+* [submission PR](https://github.com/meron-401n14/lab-14new/pull/1)
+* [travis](http://xyz.com)
+* [Heroku](https://lab-14new.herokuapp.com/)
 
-## Before you begin
-Refer to *Getting Started*  in the [lab submission instructions](../../../reference/submission-instructions/labs/README.md) for complete setup, configuration, deployment, and submission instructions.
 
-## Getting Started
+#### Documentation
+* [jsdoc](comments only)
+* [styleguide](https://github.com/shri/JSDoc-Style-Guide#functions)
 
-## Requirements
-* API Routes must now be protected with the proper permissions based on user capability
-  * `app.get(...)` should should not require authentication
-  * `app.post(...)` should require the `create` capability
-  * `app.put(...)` should require the `update` capability
-  * `app.patch(...)` should require the `update` capability
-  * `app.delete(...)` should require the `delete` capability
-* Clean and modularize Auth Middleware
-* Clean/Tighten the Auth Model
-* Stretch Goal
-  * Multiple OAuth Providers Support
-  * Create an abstraction for the `oauth` route
 
-**Implementation Notes/Advice**
-  * Use the code you've already written for the `auth-server` and the `api-server`!
-  * Add the `auth` module/folder from the `auth-server` to the API server
-  * Import and use the auth routes in the API server
-  * Create users and roles in the mongo database
+### Modules
+* roles
+* users
+* router
+#### models
+* users
+* roles
+* model
 
-### Testing
-* Tests from both previous servers should work in the new merged server...
-* 100% Test Coverage Goal For:
-  * Auth router
-    * Signup
-    * Sign In via username/password or Token
-  * Model Finder Middleware
-  * Auth Middleware
-    * Protected Routes
-  * OAuth Chooser
-  * API Routes
-    * Make assertions on the data shapes returned from the API routes
+### Setup
+#### `.env` requirements
+* `PORT` - 3000
+* `MONGODB_URI` - URL to the running mongo instance/db
 
-## Assignment Submission Instructions
-Refer to the the [lab submission instructions](../../../reference/submission-instructions/labs/README.md) for the complete lab submission process and expectations
+#### Running the app
+* `npm start`
+* Endpoint: `/foo/bar/`
+  * Returns a JSON object with abc in it.
+* Endpoint: `/bing/zing/`
+  * Returns a JSON object with xyz in it.
+  
+#### Tests
+* How do you run tests?
+* What assertions were made?
+* What assertions need to be / should be made?
+
+#### UML
+Link to an image of the UML for your application and response to events
+
+
