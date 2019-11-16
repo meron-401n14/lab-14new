@@ -8,23 +8,17 @@ const auth = require('../middleware/auth.js');
  * 
  */
 
-router.post('/signup', (req, res, next) => {
+router.post('/signup', auth,  (req, res, next) => {
   res.status(200).json({token: 'Bearer' + req.token});
 });
 
-
-
-
-
-
-
-
-
 /**
  * this function allows users to sign in using a username and passwrd
- * @rote POST signin
+ * @rote POST /signin
  * @group auth - Signin/Signup routes
- * @param {string}
+ * @param {string} authorization.headers.required - A basic auth string 
+ * containing the username and password
+ * @returns {object} 200 - The bearer token
  */
 router.post('/signin',  auth,   (req, res, next) => {
   //req.headers.authorization
@@ -35,3 +29,11 @@ router.post('/signin',  auth,   (req, res, next) => {
 });
 
 module.exports = router;
+
+
+
+
+
+
+
+
