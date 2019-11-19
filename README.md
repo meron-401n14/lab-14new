@@ -1,4 +1,4 @@
-# LAB - 
+# LAB - 14
 
 ## Project: Access Control
 
@@ -23,6 +23,7 @@
 * users
 * roles
 * model
+* books
 
 ### Setup
 #### `.env` requirements

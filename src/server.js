@@ -41,7 +41,7 @@ app.use(errorHandler);
 module.exports = {
   server: app,
   start: port => {
-    const PORT = port || process.env.PORT || 3000;
+    const PORT = port || process.env.PORT || 4000;
 
     app.listen(PORT, () => {
       console.log(`Server Up on ${PORT}`);
