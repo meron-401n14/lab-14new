@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const modelFinder = require('../middleware/model-finder.js');
-const PreventAuthErrors = require('../middleware/prevent-auth-errors.js');
+const preventAuthErrors= require('../middleware/preventAuth-errors.js');
 const auth = require('../middleware/auth.js');
 
 router.param('model', modelFinder.load);
@@ -19,23 +19,27 @@ router.param('model', modelFinder.load);
  * @returns {Error}   500 - when the given model is not found.
  */
 
-router.get('/model/:model', PreventAuthErrors, auth,  async (req, res, next) => {
+router.get('/model/:model', preventAuthErrors, auth,  async (req, res, next) => {
+
   console.log('Model route has a user?', req.user);
+
   if(!req.model) next({status: 404, msg: 'Cannot find requested model'});
+  console.log('model', req.model);
 
   let records = await req.model.getFromField({});
+  console.log('recors', records);
   let recordCount = records.length;
   
 
   //console.log(records);
 
-  let resData = {
+  let data = {
     model: req.params.model,
     count: recordCount,
   };
 
-  if(req.user && req.user.role === 'admin') resData.records = records;
-  res.status(200).json(resData);
+  if(req.user && req.user.role === 'admin') data.records = records;
+  res.status(200).json(data);
 });
 
 /**

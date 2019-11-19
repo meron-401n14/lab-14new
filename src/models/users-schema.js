@@ -34,20 +34,21 @@ users.pre('findOne', function() {
 /**
  * this function compares a plaintext password with the stored hashed password with the stored hased
  * password for an individual user record (`this` refers to an individual )
- * for an individua; user record (`this` referes to an indevidual )record
+ * for an individua; user record (`this` referes to an indevidual record)
+ * @return {boolean}   password match
  * @param string paintext 
  */
 
-users.methods.comparePasswords = async function(plaintextPassword) {
-  return   await bcrypt.compare(plainTextPassword, this.password);
+users.methods.comparePassword = function(plaintextPassword) {
+  return   bcrypt.compare(plaintextPassword, this.password);
 
 };
 
 users.methods.generateToken  = function(timeout){
-console.log('Current Time')
+  console.log('Current Time');
   let expiry = Math.floor(Date.now() /1000) + 60*60;
   if(parseInt(timeout))
-  expiry = Math.floor(Date.now())
+    expiry = Math.floor(Date.now()/1000) + parseInt(timeout);
   
   return jwt.sign({
     data: {
@@ -60,10 +61,10 @@ console.log('Current Time')
 users.methods.can =  function(capability) {
 // check user (this) > virtual_role > capabilites > if the parameter exisits in this array
 
-return this.virtual_role.capabilities.includes(capablity);
-}
+  return this.virtual_role.capabilities.includes(capability);
+};
 
-users.pre('save', )
+//users.pre('save', );
 
 /**
  * Exporting a mongoose model generated from the above schema, statics, methods and middleware

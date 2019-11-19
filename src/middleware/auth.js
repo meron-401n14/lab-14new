@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 
 
 
+
 /**
  * this takes encoded base 64 string of format username:password and finds
  * the match user from that data
@@ -77,7 +78,7 @@ module.exports = async (req, res, next) => {
   // ['Basic', 'kdlfkrofjofjoofosd=']
   // ['Bearer', 'i0nkh04bj3bjwb']
 
-  let   authSplitString = req.headers.authorization.split(/\s+/);
+  let authSplitString = req.headers.authorization.split(/\s+/);
   console.log('req error:', req.authError);
 
   if(authSplitString !==2)
@@ -88,7 +89,7 @@ module.exports = async (req, res, next) => {
   let authType= authSplitString[0];
   let authData = authSplitString[1];
 
-  //console.log('Request header:'  authType, authData)
+  //console.log('Request header:',  authType, authData);
   
   let user;
 
@@ -99,7 +100,7 @@ module.exports = async (req, res, next) => {
       ? next()
       : next({status:400, msg: 'Neither Basic nor Bearer request header'});
 
-  // console.log('Returned User from decode/decrypt', user);
+  console.log('Returned User from decode/decrypt', user);
   if(user){
     req.user = user;
     req.token = user.generateToken(req.headers.timeout);
