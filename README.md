@@ -5,7 +5,7 @@
 ### Author: Meron
 
 ### Links and Resources
-* [submission PR](https://github.com/meron-401n14/lab-14new/pull/1)
+* [submission PR](https://github.com/meron-401n14/lab-14new/pull/2)
 * [travis](http://xyz.com)
 * [Heroku](https://lab-14new.herokuapp.com/)
 
