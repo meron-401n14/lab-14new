@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
  * @param {string }  encoded - base64 string
  * @returns {object}     -found users from our database
  */
-const basicDecode = async encoded => {
+const basicDecode = async  encoded => {
   let base64 = Buffer.from(encoded, 'base64');
   let plainText = base64.toString();
   //sara:sarahpassword
@@ -20,11 +20,11 @@ const basicDecode = async encoded => {
 
   let [username, password] = plainText.split(':');
   let user = await users.getFromField({username});
- 
+  console.log('check users', user);
   // if it's an empty array, we won't hit this
   // otherwise, we want to get to the object at index 0
 
-  if(user.length && (await user[0].comparePassword(password))) return user[0];
+  if(user.length && ( await user[0].comparePassword(password))) return user[0];
   // if(user.length){
   //   let isSamePassword = await user[0].comparePassword(password);
   //   if(isSamePassword) return user[0];
@@ -34,18 +34,19 @@ const basicDecode = async encoded => {
 
   //   }
   // }
+ // if(user.length && (await user[0].comparePassword(password))) return user[0];
   // // if its an empty array, we wont hit this
   //otherwise, we want to get to the object at index 0
 
 };
 
-const bearerDecrypt = async token => {
+const bearerDecrypt = async  token => {
   try {
-    let tokenData= jwt.verify(token, process.env.JWT_SECRET);
-    console.log('token data',tokenData);
+    let tokenData = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('is token data there?', tokenData);
     if(tokenData && tokenData.data && tokenData.data.id)
 
-      return  await users.get(tokenData.data.id);
+      return await  users.get(tokenData.data.id);
   } catch (e) {
     console.error(e);
     return null;
@@ -64,9 +65,10 @@ const bearerDecrypt = async token => {
  */
 module.exports = async (req, res, next) => {
   //what is one thing we need to do here
-  
+  //authSplitString, authType, authData;
   console.log('headers', req.headers);
-  if(!req.headers.authorization) 
+  if(!req.headers.authorization)
+  //if(!req.headers.authorization) 
 
     return req.authError === false 
       ? next() 
@@ -76,20 +78,20 @@ module.exports = async (req, res, next) => {
   // ['Basic', 'kdlfkrofjofjoofosd=']
   // ['Bearer', 'i0nkh04bj3bjwb']
 
-  let authSplitString = req.headers.authorization.split(/\s+/);
+  let  authSplitString = req.headers.authorization.split(/\s+/);
   //console.log('req error:', req.authError);
-  //console.log('authSplitString', authSplitString);
+  //console.log('authSplitString',  authSplitString);
 
-  if(authSplitString !== 2)
-    return req.authError === false
+  if(authSplitString.length !== 2)
+    return req.authError === false 
       ? next()
-      : next({status: 400, msg: 'Incorrect format of request header'});
+      : next({status: 400,  msg: 'Incorrect format of request header'});
 
-  let authType= authSplitString[0];
+  let  authType=  authSplitString[0];
 
-  let authData = authSplitString[1];
+  let  authData =  authSplitString[1];
 
-  console.log('Request header:',  authType, authData);
+  //console.log('Here Request header:',  authType, authData);
   
   let user;
   if(authType === 'Basic') user = await basicDecode(authData);
@@ -99,11 +101,11 @@ module.exports = async (req, res, next) => {
       ? next()
       : next({status:400, msg: 'Neither Basic nor Bearer request header'});
 
-  console.log('Returned User from decode/decrypt', user);
+  //console.log('Returned User from decode/decrypt', user);
   if(user){
     req.user = user;
     req.token = user.generateToken(req.headers.timeout);
-    //console.log('our created token', req.token);
+    console.log('our created token', req.token);
     return next();
   } else 
     return req.authError === false

@@ -21,13 +21,13 @@ router.param('model', modelFinder.load);
 
 router.get('/model/:model', preventAuthErrors, auth,  async (req, res, next) => {
 
-  console.log('Model route has a user?', req.user);
+  console.log('Model route has a user?', req.users);
 
-  if(!req.model) next({status: 404, msg: 'Cannot find requested model'});
+  if(!req.model)   next({status: 404, msg: 'Cannot find requested model'});
   console.log('model', req.model);
 
   let records = await req.model.getFromField({});
-  console.log('recors', records);
+  // console.log('recors', records);
   let recordCount = records.length;
   
 
@@ -39,6 +39,7 @@ router.get('/model/:model', preventAuthErrors, auth,  async (req, res, next) => 
   };
 
   if(req.user && req.user.role === 'admin') data.records = records;
+
   res.status(200).json(data);
 });
 
@@ -52,8 +53,8 @@ router.get('/model/:model', preventAuthErrors, auth,  async (req, res, next) => 
  * @returns {object} 200 - the record we found
  * @returns {Error} 403- if  the user is not of role admin
  * @returns {Error} 404 - if  the record was not found
- * */
-router.get('/model/:model/:id', auth, async(req, res, next) => {
+ */
+router.get('/model/:model/:id', auth,  async (req, res, next) => {
   // only admins can access this route
   // auth is required 
 
@@ -63,8 +64,8 @@ router.get('/model/:model/:id', auth, async(req, res, next) => {
 
     if(record && record._id) res.status(200).json(record);
   
-    else next({status: 404, msg: 'Unable to find record'});
-  } else next({status: 403, msg: 'Forbidden to access this route'});
+    else next({status: 404, msg: 'Unable to find record'}); }
+  else next({status: 403, msg: 'Forbidden to access this route'});
 
   // send error
 });

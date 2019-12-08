@@ -24,7 +24,7 @@ router.get('/books', auth,  async(req, res, next) => {
 router.post('/books', auth, async(req, res, next) => {
   if(req.user.can('create')=== true) {
     try {
-      await  books.create()(req.body);
+      await  books.create(req.body);
       res.status(200).json('You created a book!');
     } catch(e) {
       console.error(e);

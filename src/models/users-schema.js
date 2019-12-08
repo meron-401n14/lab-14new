@@ -21,7 +21,7 @@ const users = new mongoose.Schema({
 );
 
 users.virtual('virtual_role', {
-  ref: 'roles',
+  ref: roles,
   localField: 'role',
   foreignField: 'role',
   justOne: true,
